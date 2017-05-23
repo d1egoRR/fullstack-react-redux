@@ -1,5 +1,6 @@
 var path = require('path');
-const webpack = require('webpack');
+var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/app.js',
@@ -19,5 +20,13 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  devServer: {
+    historyApiFallback: true,
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'src/index.html'
+    })
+  ]
 }
