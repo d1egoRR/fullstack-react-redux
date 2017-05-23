@@ -1,2 +1,4 @@
 node_modules
 dist
+fullstack-react-redux/node_modules
+fullstack-react-redux/dist
