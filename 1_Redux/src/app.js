@@ -4,11 +4,19 @@ import reducers from './reducers/index'
 import {addToCart} from './actions/cartActions';
 import {postBook, deleteBook, updateBook} from './actions/bookActions';
 
-const store = createStore(reducers);
+/**********************************************/
+// REDUX MIDDLEWARE
+import logger from 'redux-logger';
+import {applyMiddleware} from 'redux';
+const middleware = applyMiddleware(logger);
+const store = createStore(reducers, middleware);
+/**********************************************/
+
+/*const store = createStore(reducers);
 
 store.subscribe(function() {
   console.log('current state is ', store.getState());
-});
+});*/
 
 store.dispatch(postBook(
     [
