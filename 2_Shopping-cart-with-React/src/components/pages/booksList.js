@@ -1,12 +1,13 @@
 "use strict"
 
 import React from 'react';
-import {connect} from 'react-redux';
+import {connect as book_connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {getBooks} from '../../actions/bookActions'
 import {Grid, Col, Row, Button} from 'react-bootstrap';
 import BookItem from './bookItem';
 import BookForm from './bookForm';
+import Cart from './cart';
 
 class BooksList extends React.Component {
   componentDidMount() {
@@ -27,9 +28,12 @@ class BooksList extends React.Component {
     });
     return(
       <Grid>
+        <Row>
+          <Cart/>
+        </Row>
         <Row style={{marginTop:'15px'}}>
           <Col xs={12} sm={6}>
-            <BookForm />
+            <BookForm/>
           </Col>
           {booksList}
         </Row>
@@ -50,4 +54,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BooksList);
+export default book_connect(mapStateToProps, mapDispatchToProps)(BooksList);
