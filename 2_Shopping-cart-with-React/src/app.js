@@ -21,8 +21,8 @@ render(
   document.getElementById('app')
 );
 
-var books = [
-  {
+/*
+var books = [{
     id: 1,
     title: 'Java programming',
     description: 'libro malo',
@@ -33,7 +33,7 @@ var books = [
     title: 'Python OO 2016',
     description: 'libro excelente',
     price: 42.80
-  }
-]
+  }]
 
 store.dispatch(postBook(books));
+*/

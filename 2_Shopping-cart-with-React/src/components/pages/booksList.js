@@ -2,23 +2,38 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {getBooks} from '../../actions/bookActions'
+import {Grid, Col, Row, Button} from 'react-bootstrap';
+import BookItem from './bookItem';
+import BookForm from './bookForm';
 
 class BooksList extends React.Component {
+  componentDidMount() {
+    this.props.getBooks();
+  }
+
   render() {
-    const booksList = this.props.books.map(function(book) {
+    const booksList = this.props.books.map(function(booksArr) {
       return(
-        <div key={book.id}>
-          <h2>{book.title}</h2>
-          <h2>{book.description}</h2>
-          <h2>{book.price}</h2>
-        </div>
+        <Col xs={12} sm={6} md={4} key={booksArr.id}>
+          <BookItem
+            id={booksArr.id}
+            title={booksArr.title}
+            description={booksArr.description}
+            price={booksArr.price} />
+        </Col>
       )
     });
     return(
-      <div>
-        <h1>Hola REACT</h1>
-        {booksList}
-      </div>
+      <Grid>
+        <Row style={{marginTop:'15px'}}>
+          <Col xs={12} sm={6}>
+            <BookForm />
+          </Col>
+          {booksList}
+        </Row>
+      </Grid>
     )
   }
 }
@@ -29,4 +44,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(BooksList);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    getBooks: getBooks
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BooksList);
