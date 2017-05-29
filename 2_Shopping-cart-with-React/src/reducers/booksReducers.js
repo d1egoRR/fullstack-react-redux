@@ -2,13 +2,13 @@
 
 export function booksReducers(
   state={books: [{
-    id: 1,
+    _id: 1,
     title: 'Java programming',
     description: 'libro malo',
     price: 35.50
   },
   {
-    id: 2,
+    _id: 2,
     title: 'Python OO 2016',
     description: 'libro excelente',
     price: 42.80
@@ -24,7 +24,7 @@ export function booksReducers(
       const currentBookToDelete = [...state.books];
       const indexToDelete = currentBookToDelete.findIndex(
         function(book) {
-          return book.id == action.payload.id;
+          return book._id == action.payload._id;
         }
       );
 
@@ -39,7 +39,7 @@ export function booksReducers(
       const currentBookToUpdate = [...state.books];
       const indexToUpdate = currentBookToUpdate.findIndex(
         function(book) {
-          return book.id == action.payload.id;
+          return book._id == action.payload._id;
         }
       );
 

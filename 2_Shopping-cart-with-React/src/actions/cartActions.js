@@ -6,3 +6,17 @@ export function addToCart(book) {
     payload: book
   }
 }
+
+/*export function deleteCartItem(_id) {
+  return {
+    type: 'DELETE_CART_ITEM',
+    payload: _id
+  }
+}*/
+
+export function deleteCartItem(cart) {
+  return {
+    type: 'DELETE_CART_ITEM',
+    payload: cart
+  }
+}
