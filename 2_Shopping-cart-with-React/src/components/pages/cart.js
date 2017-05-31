@@ -1,12 +1,28 @@
 "use strict"
 import React from 'react';
 import {connect} from 'react-redux';
-import {Panel, Row, Col, Well, Button, ButtonGroup, Label} from 'react-bootstrap';
+import {Modal, Panel, Row, Col, Well, Button, ButtonGroup, Label} from 'react-bootstrap';
 import {connect as cart_connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {deleteCartItem} from '../../actions/cartActions'
+import {deleteCartItem, updateCart} from '../../actions/cartActions'
 
 class Cart extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      showModal: false
+    }
+  }
+
+  open() {
+    this.setState({showModal: true});
+  }
+
+  close() {
+    this.setState({showModal: false});
+  }
+
   render() {
     if (this.props.cart[0])
       return this.renderCart();
@@ -42,12 +58,18 @@ class Cart extends React.Component {
               <h6>usd. {cartArr.price}</h6>
             </Col>
             <Col xs={12} sm={2}>
-              <h6>qty <Label bsStyle='success'></Label></h6>
+              <h6>qty <Label bsStyle='success'>{cartArr.quantity}</Label></h6>
             </Col>
             <Col xs={12} sm={4}>
               <ButtonGroup style={{minwidth: '300 px'}}>
-                <Button bsStyle='default' bsSize='small'>-</Button>
-                <Button bsStyle='default' bsSize='small'>+</Button>
+                <Button
+                  onClick={this.onDecrement.bind(this, cartArr._id, cartArr.quantity)}
+                  bsStyle='default'
+                  bsSize='small'>-</Button>
+                <Button
+                  onClick={this.onIncrement.bind(this, cartArr._id)}
+                  bsStyle='default'
+                  bsSize='small'>+</Button>
                 <span>     </span>
                 <Button
                   onClick={this.onDelete.bind(this, cartArr._id)}
@@ -65,6 +87,31 @@ class Cart extends React.Component {
     return(
       <Panel header='cart' bsStyle='primary'>
         {cartItemsList}
+        <Row>
+          <Col xs={12}>
+            <h6>Monto Total: {this.props.totalAmount}</h6>
+            <Button
+              onClick={this.open.bind(this)}
+              bsStyle='success'
+              bsSize='small'>
+                Proceder a Pagar
+            </Button>
+          </Col>
+        </Row>
+        <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Muchas gracias!!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h6>Tu orden ha sido recibida</h6>
+          </Modal.Body>
+          <Modal.Footer>
+            <Col xs={6}>
+              <h6>Total $: {this.props.totalAmount}</h6>
+            </Col>
+            <Button onClick={this.close.bind(this)}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </Panel>
     )
   }
@@ -72,17 +119,30 @@ class Cart extends React.Component {
   renderEmpty() {
     return(<div></div>)
   }
+
+  onIncrement(_id) {
+    this.props.updateCart(_id, 1);
+  }
+
+  onDecrement(_id, quantity) {
+    if (quantity > 1) {
+      this.props.updateCart(_id, -1);
+    }
+  }
 }
 
 function mapStateToProps(state) {
   return {
-    cart: state.cart.cart
+    cart: state.cart.cart,
+    totalAmount: state.cart.totalAmount,
+    totalQty: state.cart.totalQty
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    deleteCartItem: deleteCartItem
+    deleteCartItem: deleteCartItem,
+    updateCart: updateCart
   }, dispatch);
 }
 

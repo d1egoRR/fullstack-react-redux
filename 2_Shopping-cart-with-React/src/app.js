@@ -10,30 +10,27 @@ import {Provider} from 'react-redux';
 import BooksList from './components/pages/booksList';
 import logger from 'redux-logger';
 import {applyMiddleware} from 'redux';
+import Menu from './components/pages/menu'
+import Footer from './components/pages/footer'
+import {Router, IndexRoute, Route, browserHistory} from 'react-router';
+
+import Cart from './components/pages/cart';
+import BookForm from './components/pages/bookForm';
+import Main from './main';
 
 const middleware = applyMiddleware(logger);
 const store = createStore(reducers, middleware);
 
-render(
+const Routes = (
   <Provider store={store}>
-    <BooksList/>
-  </Provider>,
-  document.getElementById('app')
-);
+    <Router history={browserHistory}>
+      <Route path='/' component={Main}>
+        <IndexRoute component={BooksList}/>
+        <Route path='/admin' component={BookForm}/>
+        <Route path='/cart' component={Cart}/>
+      </Route>
+    </Router>
+  </Provider>
+)
 
-/*
-var books = [{
-    id: 1,
-    title: 'Java programming',
-    description: 'libro malo',
-    price: 35.50
-  },
-  {
-    id: 2,
-    title: 'Python OO 2016',
-    description: 'libro excelente',
-    price: 42.80
-  }]
-
-store.dispatch(postBook(books));
-*/
+render(Routes, document.getElementById('app'));
