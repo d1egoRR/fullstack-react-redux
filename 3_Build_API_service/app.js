@@ -66,7 +66,30 @@ app.delete('/books/:_id', function(req, res) {
   });
 });
 
+app.put('/books/:_id', function(req, res) {
+  console.log("ppp PUT");
+  console.log("ID: " + req.params._id);
+  var book = req.body;
+  var query = req.params._id;
 
+  var update = {
+    '$set': {
+        title: book.title,
+        description: book.description,
+        image: book.image,
+        price: book.price
+    }
+  };
+
+  var options = {new: true};
+
+  Books.findOneAndUpdate(query, update, options, function(err, books) {
+    if (err) {
+      throw err;
+    }
+    res.json(books);
+  });
+});
 // END APIs
 
 // catch 404 and forward to error handler

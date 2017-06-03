@@ -1,4 +1,5 @@
 "use strict"
+import axios from 'axios';
 
 export function getBooks() {
   return {
@@ -7,9 +8,18 @@ export function getBooks() {
 }
 
 export function postBook(book) {
-  return {
-    type: 'POST_BOOK',
-    payload: book
+  console.log("aaaaaaaaa");
+  return function(dispatch) {
+    axios.post('/books', book)
+      .then(function(response) {
+        dispatch({type: 'POST_BOOK', payload: response.data})
+      })
+      .catch(function(err) {
+        dispatch({
+          type: 'POST_BOOK_REJECTED',
+          payload: 'ocurrio un error cuando se agregaba un nuevo libro'
+        })
+      })
   }
 }
 
