@@ -8,7 +8,6 @@ import {findDOMNode} from 'react-dom';
 class BookForm extends React.Component {
   handleSubmit() {
     const book = [{
-      _id: findDOMNode(this.refs._id).value,
       title: findDOMNode(this.refs.title).value,
       description: findDOMNode(this.refs.description).value,
       price: findDOMNode(this.refs.price).value
@@ -31,13 +30,6 @@ class BookForm extends React.Component {
     return(
       <Well>
         <Panel>
-          <FormGroup controlId='_id'>
-            <ControlLabel>ID Book</ControlLabel>
-            <FormControl
-              type='text'
-              placeholder='Enter ID Book'
-              ref='_id' />
-          </FormGroup>
           <FormGroup controlId='title'>
             <ControlLabel>Title</ControlLabel>
             <FormControl

@@ -8346,29 +8346,44 @@ var _axios2 = _interopRequireDefault(_axios);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getBooks() {
-  return {
-    type: 'GET_BOOKS_BOOK'
+  return function (dispatch) {
+    _axios2.default.get('/books', {
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(function (response) {
+      dispatch({ type: 'GET_BOOKS', payload: response.data });
+    }).catch(function (err) {
+      dispatch({ type: 'GET_BOOKS_REJECTED', payload: err });
+    });
   };
 }
 
 function postBook(book) {
-  console.log("aaaaaaaaa");
   return function (dispatch) {
-    _axios2.default.post('/books', book).then(function (response) {
+    _axios2.default.post('/books', book, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(function (response) {
       dispatch({ type: 'POST_BOOK', payload: response.data });
     }).catch(function (err) {
-      dispatch({
-        type: 'POST_BOOK_REJECTED',
-        payload: 'ocurrio un error cuando se agregaba un nuevo libro'
-      });
+      dispatch({ type: 'POST_BOOK_REJECTED', payload: err });
     });
   };
 }
 
 function deleteBook(_id) {
-  return {
-    type: 'DELETE_BOOK',
-    payload: _id
+  return function (dispatch) {
+    _axios2.default.delete('/books/' + _id, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(function (response) {
+      dispatch({ type: 'DELETE_BOOK', payload: _id });
+    }).catch(function (err) {
+      dispatch({ type: 'DELETE_BOOK_REJECTED', payload: err });
+    });
   };
 }
 
@@ -12694,7 +12709,6 @@ var BookForm = function (_React$Component) {
     key: 'handleSubmit',
     value: function handleSubmit() {
       var book = [{
-        _id: (0, _reactDom.findDOMNode)(this.refs._id).value,
         title: (0, _reactDom.findDOMNode)(this.refs.title).value,
         description: (0, _reactDom.findDOMNode)(this.refs.description).value,
         price: (0, _reactDom.findDOMNode)(this.refs.price).value
@@ -12724,19 +12738,6 @@ var BookForm = function (_React$Component) {
         _react2.default.createElement(
           _reactBootstrap.Panel,
           null,
-          _react2.default.createElement(
-            _reactBootstrap.FormGroup,
-            { controlId: '_id' },
-            _react2.default.createElement(
-              _reactBootstrap.ControlLabel,
-              null,
-              'ID Book'
-            ),
-            _react2.default.createElement(_reactBootstrap.FormControl, {
-              type: 'text',
-              placeholder: 'Enter ID Book',
-              ref: '_id' })
-          ),
           _react2.default.createElement(
             _reactBootstrap.FormGroup,
             { controlId: 'title' },
@@ -23862,22 +23863,12 @@ exports.booksReducers = booksReducers;
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function booksReducers() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [{
-      _id: 1,
-      title: 'Java programming',
-      description: 'libro malo',
-      price: 35.50
-    }, {
-      _id: 2,
-      title: 'Python OO 2016',
-      description: 'libro excelente',
-      price: 42.80
-    }] };
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
   var action = arguments[1];
 
   switch (action.type) {
-    case 'GET_BOOKS_BOOK':
-      return _extends({}, state, { books: [].concat(_toConsumableArray(state.books)) });
+    case 'GET_BOOKS':
+      return _extends({}, state, { books: [].concat(_toConsumableArray(action.payload)) });
       break;
     case 'POST_BOOK':
       return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };

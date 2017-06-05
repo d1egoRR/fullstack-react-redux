@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('*', function(req, res) {
+app.get('/', function(req, res) {
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
@@ -34,7 +34,6 @@ mongoose.connect('mongodb://localhost:27017/bookshop');
 var Books = require('./models/books.js');
 
 app.post('/books', function(req, res) {
-  console.log("bbb POST");
   var book = req.body;
 
   Books.create(book, function(err, books) {
@@ -46,8 +45,7 @@ app.post('/books', function(req, res) {
 });
 
 app.get('/books', function(req, res) {
-  console.log("cccc GET");
-  Books.find(book, function(err, books) {
+  Books.find(function(err, books) {
     if (err) {
       throw err;
     }
@@ -56,8 +54,8 @@ app.get('/books', function(req, res) {
 });
 
 app.delete('/books/:_id', function(req, res) {
-  console.log("dddd DELTE");
-  var query = {"id": "5930a4ccbdbcc90938b25e89"};
+  console.log("dddd DELETE");
+  var query = {_id: req.params._id};
   Books.remove(query, function(err, books) {
     if (err) {
       throw err;

@@ -2,31 +2,50 @@
 import axios from 'axios';
 
 export function getBooks() {
-  return {
-    type: 'GET_BOOKS_BOOK'
+  return function(dispatch) {
+    axios.get('/books', {
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(function(response) {
+      dispatch({type: 'GET_BOOKS', payload: response.data})
+    })
+    .catch(function(err) {
+      dispatch({type: 'GET_BOOKS_REJECTED', payload: err})
+    })
   }
 }
 
 export function postBook(book) {
-  console.log("aaaaaaaaa");
   return function(dispatch) {
-    axios.post('/books', book)
-      .then(function(response) {
-        dispatch({type: 'POST_BOOK', payload: response.data})
-      })
-      .catch(function(err) {
-        dispatch({
-          type: 'POST_BOOK_REJECTED',
-          payload: 'ocurrio un error cuando se agregaba un nuevo libro'
-        })
-      })
+    axios.post('/books', book, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(function(response) {
+      dispatch({type: 'POST_BOOK', payload: response.data})
+    })
+    .catch(function(err) {
+      dispatch({type: 'POST_BOOK_REJECTED', payload: err})
+    })
   }
 }
 
 export function deleteBook(_id) {
-  return {
-    type: 'DELETE_BOOK',
-    payload: _id
+  return function(dispatch) {
+    axios.delete('/books/' + _id, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(function(response) {
+      dispatch({type: 'DELETE_BOOK', payload: _id})
+    })
+    .catch(function(err) {
+      dispatch({type: 'DELETE_BOOK_REJECTED', payload: err})
+    })
   }
 }
 
