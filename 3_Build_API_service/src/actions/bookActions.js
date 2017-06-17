@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export function getBooks() {
   return function(dispatch) {
-    axios.get('/books', {
+    axios.get('/api/books', {
       headers: {
         'Accept': 'application/json'
       }
@@ -19,7 +19,7 @@ export function getBooks() {
 
 export function postBook(book) {
   return function(dispatch) {
-    axios.post('/books', book, {
+    axios.post('/api/books', book, {
       headers: {
         'Accept': 'application/json'
       }
@@ -35,7 +35,7 @@ export function postBook(book) {
 
 export function deleteBook(_id) {
   return function(dispatch) {
-    axios.delete('/books/' + _id, {
+    axios.delete('/api/books/' + _id, {
       headers: {
         'Accept': 'application/json'
       }
