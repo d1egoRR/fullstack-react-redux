@@ -22,7 +22,8 @@ db.on('error', console.error.bind(console, '# MongoDB connection error'));
 app.use(session({
   secret: 'mySecretString',
   saveUninitialized: false,
-  resave: true,
+  resave: false,
+  cookie: {maxAge: 1000 * 60 * 60 * 24 * 2}, // 2 days in milliseconds
   store: new MongoStore({mongooseConnection: db, ttl: 2 * 24 * 60 * 60})
   // 2 dias, 24 horas, 60 minutos, 60 segundos
 }));
