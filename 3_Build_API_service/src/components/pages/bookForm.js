@@ -2,7 +2,7 @@ import React from 'react';
 import {MenuItem, InputGroup, DropdownButton, Image, Col, Row, Well, Panel, FormControl, FormGroup, ControlLabel, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postBook, deleteBook, getBooks} from '../../actions/bookActions'
+import {postBook, deleteBook, getBooks, resetButton} from '../../actions/bookActions'
 import {findDOMNode} from 'react-dom';
 import axios from 'axios';
 
@@ -35,6 +35,14 @@ class BookForm extends React.Component {
       price: findDOMNode(this.refs.price).value
     }];
     this.props.postBook(book);
+  }
+
+  resetForm() {
+    this.props.resetButton();
+    findDOMNode(this.refs.title).value = '';
+    findDOMNode(this.refs.description).value = '';
+    findDOMNode(this.refs.price).value = '';
+    this.setState({img: ''});
   }
 
   handleSelect(img) {
@@ -107,7 +115,11 @@ class BookForm extends React.Component {
                   placeholder='Enter Price'
                   ref='price' />
               </FormGroup>
-              <Button onClick={this.handleSubmit.bind(this)} bsStyle='primary'>Save Book</Button>
+              <Button
+                onClick={(!this.props.msg) ? (this.handleSubmit.bind(this)) : (this.resetForm.bind(this))}
+                bsStyle={(!this.props.style) ? ('primary') : (this.props.style)}>
+                  {(!this.props.msg) ? ('Save Book') : (this.props.msg)}
+              </Button>
             </Panel>
             <Panel style={{marginTop:'25px'}}>
               <FormGroup controlId="formControlsSelect">
@@ -132,7 +144,9 @@ class BookForm extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    books: state.books.books
+    books: state.books.books,
+    msg: state.books.msg,
+    style: state.books.style
   }
 }
 
@@ -140,7 +154,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     postBook,
     deleteBook,
-    getBooks
+    getBooks,
+    resetButton
   }, dispatch);
 }
 

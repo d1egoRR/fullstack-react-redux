@@ -49,6 +49,12 @@ export function deleteBook(_id) {
   }
 }
 
+export function resetButton() {
+  return {
+    type: 'RESET_BUTTON'
+  }
+}
+
 export function updateBook(book) {
   return {
     type: 'UPDATE_BOOK',
